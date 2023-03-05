@@ -71,7 +71,8 @@ const Register = () => {
 
   return (
     <Wrapper className="full-page">
-      <form className="form" onSubmit={onSubmit}>
+      <form className="form-abc" onSubmit={onSubmit}>
+        
         <img src={Logo} alt="JobScoute" className="logo " />
         <h3>{values.isMember ? "Login" : "Register"}</h3>
         {showAlert && <Alert />}
@@ -99,7 +100,21 @@ const Register = () => {
           handleChange={handleChange}
         />
         <button type="submit" className="btn btn-block" disabled={isLoading}>
-          Submit
+          Submit 
+        </button>
+
+        <button type="button" className="btn btn-block btn-hipster "
+        disabled ={isLoading}
+        onClick ={()=>{
+          setupUser({
+            currentUser:{email:'nil12@gmail.com',password :'secret'},
+            endPoint: "login",
+            alertText: "Login Successfull! Redirecting...",
+          });
+
+        }}
+        >  
+        {isLoading?'Loading....':'demo app'}
         </button>
 
         <p>
@@ -108,6 +123,7 @@ const Register = () => {
             {values.isMember ? "Register" : "Login"}
           </button>
         </p>
+        
       </form>
     </Wrapper>
   );

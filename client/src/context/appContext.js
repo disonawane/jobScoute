@@ -29,6 +29,14 @@ import {
   GET_JOBS_BEGIN,
   GET_JOBS_SUCCESS,
   SET_EDIT_JOB,
+  DELETE_JOB_BEGIN,
+  EDIT_JOB_BEGIN,
+  EDIT_JOB_SUCCESS,
+  EDIT_JOB_ERROR,
+  SHOW_STATS_BEGIN,
+  SHOW_STATS_SUCCESS,
+  CLEAR_FILTERS,
+  CHANGE_PAGE,
 } from "./action";
 
 const token = localStorage.getItem("token");
@@ -53,10 +61,17 @@ const initialState = {
   jobType: "full-time",
   statusOptions: ["interview", "declined", "pending"],
   status: "pending",
-  jobs:[],
+  jobs: [],
   totalJobs: 0,
   numOfPages: 1,
   page: 1,
+  stats: {},
+  monthlyApplications: [],
+  search: "",
+  searchStatus: "all",
+  searchType: "all",
+  sort: "latest",
+  sortOptions: ["latest", "oldest", "a-z", "z-a"],
 };
 
 const AppContext = React.createContext();
@@ -70,7 +85,7 @@ const AppProvider = ({ children }) => {
   //request
   authFetch.interceptors.request.use(
     (config) => {
-      config.headers.common['Authorization']= `Bearer ${state.token}`
+      config.headers.authorization = `Bearer ${state.token}`;
       return config;
     },
     (error) => {
@@ -241,13 +256,16 @@ const AppProvider = ({ children }) => {
 
   const getJobs = async () => {
     debugger;
-    let url = `/jobs`
-
-    dispatch({ type: GET_JOBS_BEGIN })
+    const { page,search, searchStatus, searchType, sort } = state;
+    let url = `/jobs?page=${page}&status=${searchStatus}&jobtype=${searchType}&sort=${sort}`;
+    if (search) {
+      url = url + `&search=${search}`;
+    }
+    dispatch({ type: GET_JOBS_BEGIN });
     try {
       const { data } = await authFetch(url);
       const { jobs, totalJobs, numOfPages } = data;
-      
+
       dispatch({
         type: GET_JOBS_SUCCESS,
         payload: {
@@ -255,13 +273,10 @@ const AppProvider = ({ children }) => {
           totalJobs,
           numOfPages,
         },
-      })
-      
+      });
     } catch (error) {
-      
-      console.log(error.response);
-      //logoutUser()
-    
+      //console.log(error.response);
+      logoutUser()
     }
     clearAlert();
   };
@@ -269,13 +284,66 @@ const AppProvider = ({ children }) => {
   const setEditJob = (id) => {
     dispatch({ type: SET_EDIT_JOB, payload: { id } });
   };
-  const editJob = () => {
-    console.log(`edit job`);
+  const editJob = async () => {
+    dispatch({ type: EDIT_JOB_BEGIN });
+    try {
+      const { position, company, jobLocation, jobType, status } = state;
+      await authFetch.patch(`/jobs/${state.editJobId}`, {
+        company,
+        position,
+        jobLocation,
+        jobType,
+        status,
+      });
+
+      dispatch({ type: EDIT_JOB_SUCCESS });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: EDIT_JOB_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
   };
 
-  const deleteJob = (id) => {
-    console.log(`delete job :${id}`);
+  const deleteJob = async (jobId) => {
+    dispatch({ type: DELETE_JOB_BEGIN });
+
+    try {
+      await authFetch.delete(`/jobs/${jobId}`);
+      getJobs();
+    } catch (error) {
+     // console.log(error.response);
+       logoutUser()
+    }
   };
+  const showStats = async () => {
+    dispatch({ type: SHOW_STATS_BEGIN });
+    try {
+      const { data } = await authFetch("/jobs/stats");
+      dispatch({
+        type: SHOW_STATS_SUCCESS,
+        payload: {
+          stats: data.defaultStats,
+          monthlyApplications: data.monthlyApplications,
+        },
+      });
+    } catch (error) {
+      //console.log(error.response);
+      logoutUser()
+    }
+    clearAlert();
+  };
+  const clearFilters = () => {
+    dispatch({ type: CLEAR_FILTERS });
+  };
+  const changePage = (page) =>{
+    dispatch ({type : CHANGE_PAGE,payload:{page}})
+  }
+  
+
 
   return (
     <AppContext.Provider
@@ -295,7 +363,9 @@ const AppProvider = ({ children }) => {
         setEditJob,
         deleteJob,
         editJob,
-        
+        showStats,
+        clearFilters,
+        changePage,
       }}
     >
       {children}

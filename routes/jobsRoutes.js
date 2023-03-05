@@ -4,8 +4,8 @@ const router = express.Router();
 
 import {
   createJob,
-  getAllJobs,
   deleteJob,
+  getAllJobs,
   updateJob,
   showStats,
 } from "../controllers/jobsController.js";
