@@ -3,6 +3,7 @@ import { FormRow, FormRowSelect, Alert } from "../../components";
 import { useAppContext } from "../../context/appContext";
 
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
+//import "./AddJob.css"
 
 
 const AddJob = () => {

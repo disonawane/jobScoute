@@ -3,8 +3,9 @@ import styled from 'styled-components'
 const Wrapper = styled.section`
   border-radius: var(--borderRadius);
   width: 100%;
+  
   background: var(--white);
-  padding: 3rem 2rem 4rem;
+  padding: 1rem 1rem 1rem;
   box-shadow: var(--shadow-2);
   h3 {
     margin-top: 0;
@@ -13,9 +14,11 @@ const Wrapper = styled.section`
     margin: 0;
     border-radius: 0;
     box-shadow: none;
-    padding: 0;
+    padding:0;
+    margin-top:0;
     max-width: 100%;
     width: 100%;
+    height:100%;
   }
   .form-row {
     margin-bottom: 0;
@@ -26,7 +29,7 @@ const Wrapper = styled.section`
   }
   .form-center button {
     align-self: end;
-    height: 35px;
+ height: 35px;
     margin-top: 1rem;
   }
   .btn-container {
