@@ -9,9 +9,9 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 const BarChartComponent = ({data}) => {
-  console.log(data)
+  console.log("my data",data)
   return (
-    <ResponsiveContainer width="100%" height={300}>
+     <ResponsiveContainer width="100" height={300}>
       <BarChart
         data={data}
 
@@ -25,7 +25,7 @@ const BarChartComponent = ({data}) => {
         <Tooltip />
         <Bar dataKey="count" fill="#2cb1bc" barSize={75} />
       </BarChart>
-    </ResponsiveContainer>
+    // </ResponsiveContainer>
   );
 };
 export default BarChartComponent;

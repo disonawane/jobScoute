@@ -13,6 +13,7 @@ const ChartsContainer = () => {
         {barChart ? "Area Chart" : "Bar Chart"}
       </button>
       {barChart ? <BarChart data={data} /> : <AreaChart data={data} />}
+      
     </Wrapper>
   );
 };

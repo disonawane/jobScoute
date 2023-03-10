@@ -6,7 +6,7 @@ const StatItem = ({count,title,icon,color,bcg}) => {
     <Wrapper color={color} bcg = {bcg}>
       <header>
       <span className='count'>{count}</span>
-      <div className='icon'>{icon}</div>
+      <span className='icon'>{icon}</span>
 
 
       </header>

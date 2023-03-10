@@ -10,16 +10,7 @@ import StatsContainer from "./StatsContainer";
 import ChartsContainer from "./ChartsContainer";
 import Loading from "./Loading";
 
-export {
-  FormRow,
-  Alert,
-  Navbar,
-  BigSidebar,
-  SmallSidebar,
-  FormRowSelect,
-  JobsContainer,
-  SearchContainer,
-  StatsContainer,
-  ChartsContainer,
-  Loading,
-};
+
+
+export {FormRow,Alert,Navbar,BigSidebar,SmallSidebar,FormRowSelect,JobsContainer,
+    SearchContainer,ChartsContainer,StatsContainer,Loading}

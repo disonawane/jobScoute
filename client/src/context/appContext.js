@@ -30,7 +30,6 @@ import {
   GET_JOBS_SUCCESS,
   SET_EDIT_JOB,
   DELETE_JOB_BEGIN,
-  DELETE_JOB_ERROR,
   EDIT_JOB_BEGIN,
   EDIT_JOB_SUCCESS,
   EDIT_JOB_ERROR,
@@ -38,8 +37,6 @@ import {
   SHOW_STATS_SUCCESS,
   CLEAR_FILTERS,
   CHANGE_PAGE,
-  GET_CURRENT_USER_BEGIN,
-  GET_CURRENT_USER_SUCCESS,
 } from "./action";
 
 
@@ -84,15 +81,15 @@ const AppProvider = ({ children }) => {
     baseURL: "/api/v1/",
   });
   //request
-  // authFetch.interceptors.request.use(
-  //   (config) => {
-  //     config.headers.authorization = `Bearer ${state.token}`;
-  //     return config;
-  //   },
-  //   (error) => {
-  //     return Promise.reject(error);
-  //   }
-  // );
+  authFetch.interceptors.request.use(
+    (config) => {
+      config.headers.authorization = `Bearer ${state.token}`;
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   //response
 
@@ -317,16 +314,9 @@ const AppProvider = ({ children }) => {
       await authFetch.delete(`/jobs/${jobId}`);
       getJobs();
     } catch (error) {
-      if (error.response.status === 401) return;
-      dispatch({
-        type: DELETE_JOB_ERROR,
-        payload: { msg: error.response.data.msg },
-      });
      // console.log(error.response);
-       
-    
+       logoutUser()
     }
-    clearAlert();
   };
   const showStats = async () => {
     dispatch({ type: SHOW_STATS_BEGIN });
@@ -351,33 +341,8 @@ const AppProvider = ({ children }) => {
   const changePage = (page) =>{
     dispatch ({type : CHANGE_PAGE,payload:{page}})
   }
-
-
-
-  const getCurrentUser = async() =>{
-
-      dispatch({type:GET_CURRENT_USER_BEGIN})
-
-      try{
-
-          const {data} = await authFetch('/auth/getCurrentUser')
-          const {user,location} = data
-
-          dispatch({
-            type:GET_CURRENT_USER_SUCCESS,
-            payload:{user,location}
-          })
-      }catch(error){
-if(error.response.status === 401) return;
-loginUser();
-
-      }
-  }
   
-useEffect(()=>{
 
-  getCurrentUser()
-},[])
 
   return (
     <AppContext.Provider

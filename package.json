@@ -7,6 +7,7 @@
   "scripts": {
     "build-client": "cd client && npm run build",
     "server": "nodemon server --ignore client ",
+    "buildrun": "concurrently \"cd client && npm run build \" \"npm run server\"",
     "client": "npm start --prefix client",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \" npm run client\""
   },
