@@ -6,12 +6,17 @@ import main from "../assets/images/main.svg"
 import styled from 'styled-components'
 import "./style.css"
 
-import Wrapper from '../assets/wrappers/Testing'
+import Wrapper from '../assets/wrappers/LandingPage'
 import Logo from "../assets/images/Logo.png"
 import "../assets/css/index.css"
-import {Link} from "react-router-dom"
+import {Link,Navigate} from "react-router-dom"
+import { useAppContext } from '../context/appContext'
 const Landing = () => {
+  const {user} = useAppContext()
   return (
+    <React.Fragment>
+
+      {user && <Navigate to = '/'/>}
     <Wrapper>
         <nav>
         <img  src={Logo} alt = "JobScoute" className='logo ' />
@@ -34,6 +39,7 @@ Login/Register
 </div>
 
     </Wrapper>
+    </React.Fragment>
   )
 }
 

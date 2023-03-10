@@ -54,11 +54,14 @@ const Register = () => {
         alertText: "Login Successfull! Redirecting...",
       });
     } else {
-      setupUser({
-        currentUser,
-        endPoint: "register",
-        alertText: "User Created! Redirecting...",
-      },3000);
+      setupUser(
+        {
+          currentUser,
+          endPoint: "register",
+          alertText: "User Created! Redirecting...",
+        },
+        3000
+      );
     }
   };
   useEffect(() => {
@@ -102,6 +105,23 @@ const Register = () => {
           Submit
         </button>
 
+        <button
+          type="button"
+          className="btn btn-block btn-hipster "
+          disabled={isLoading}
+          onClick={() => {
+            setupUser({
+              currentUser: {
+                email: "testUser123@gmail.com",
+                password: "secrete",
+              },
+              endPoint: "login",
+              alertText: "Login Successfull! Redirecting...",
+            });
+          }}
+        >
+          {isLoading ? "Loading...." : "demo app"}
+        </button>
         <p>
           {values.isMember ? "Not a member yet ?" : "Already a member"}
           <button type="button" onClick={toggleMember} className="member-btn">
@@ -113,4 +133,18 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Register;   
+
+/*<button type="button" className="btn btn-block btn-hipster "
+        disabled ={isLoading}
+        onClick ={()=>{
+          setupUser({
+            currentUser:{email:'nil12@gmail.com',password :'secret'},
+            endPoint: "login",
+            alertText: "Login Successfull! Redirecting...",
+          });
+
+        }}
+        >  
+        {isLoading?'Loading....':'demo app'}
+        </button>*/
